@@ -142,6 +142,11 @@ export class Compiler {
 			}
 		}
 		await vscode.workspace.fs.writeFile(outputUri, Buffer.from(content));
+		await vscode.workspace.openTextDocument(outputUri).then((doc) => {
+			vscode.window.showTextDocument(doc, {
+				preview: false,
+			});
+		});
 	}
 
 	private async resolveDir(baseUri: vscode.Uri) {
