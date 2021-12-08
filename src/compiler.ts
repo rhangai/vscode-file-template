@@ -34,23 +34,35 @@ export class Compiler {
 				() => []
 			);
 		return templateFiles.map(([file, fileType]) => {
-			let templateName = file;
-			let templateDescription = "";
-			if (fileType === vscode.FileType.File) {
-				const ext = extname(file);
-				templateName = basename(file, ext);
-				templateDescription = ext;
-			} else if (fileType === vscode.FileType.Directory) {
-				templateDescription = "multiple";
-			}
+			const templateInfo = Compiler.parseTemplateInfo(file, fileType);
 			return {
-				templateName,
-				templateDescription,
+				...templateInfo,
 				fileName: file,
 				fileType,
 				uri: vscode.Uri.joinPath(templatesUri, file),
 			};
 		});
+	}
+
+	static parseTemplateInfo(file: string, fileType: vscode.FileType) {
+		if (fileType !== vscode.FileType.File) {
+			return {
+				templateName: file,
+				templateDescription: "",
+			};
+		}
+		const ext = extname(file);
+		let templateName = basename(file, ext);
+		let templateDescription = ext;
+		if (ext === ".template") {
+			const subExt = extname(templateName);
+			templateName = basename(templateName, subExt);
+			templateDescription = subExt;
+		}
+		return {
+			templateName,
+			templateDescription,
+		};
 	}
 
 	/**
