@@ -6,7 +6,7 @@
 		"url": "https://github.com/rhangai/vscode-file-template"
 	},
 	"displayName": "File Template",
-	"description": "Template generator from submenu context",
+	"description": "Create custom files from user defined templates",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.62.0"
