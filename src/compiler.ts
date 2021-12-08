@@ -69,12 +69,17 @@ export class Compiler {
 		}
 	}
 
-	private createContext(name: string) {
+	private createContext(outputBaseUri: vscode.Uri, name: string) {
+		const dir = basename(outputBaseUri.fsPath);
 		return {
 			name: name,
 			nameParam: helpers.case.param(name),
 			nameCamel: helpers.case.camel(name),
 			namePascal: helpers.case.pascal(name),
+			dir,
+			dirParam: helpers.case.param(dir),
+			dirCamel: helpers.case.camel(dir),
+			dirPascal: helpers.case.pascal(dir),
 		};
 	}
 
@@ -93,7 +98,7 @@ export class Compiler {
 			([, fileType]) => fileType === vscode.FileType.File
 		);
 
-		const context = this.createContext(name);
+		const context = this.createContext(outputBaseUri, name);
 		for (const [file] of files) {
 			const outputFilename = Mustache.render(file, context);
 			await this.doWriteFile(
@@ -109,7 +114,7 @@ export class Compiler {
 		templateUri: vscode.Uri,
 		name: string
 	) {
-		const context = this.createContext(name);
+		const context = this.createContext(outputBaseUri, name);
 		const extension = extname(templateUri.path);
 		const outputUri = vscode.Uri.joinPath(outputBaseUri, `${name}${extension}`);
 		await this.doWriteFile(outputUri, templateUri, context);
