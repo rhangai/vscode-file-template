@@ -111,10 +111,7 @@ export class Compiler {
 	) {
 		const context = this.createContext(name);
 		const extension = extname(templateUri.path);
-		const outputUri = vscode.Uri.joinPath(
-			outputBaseUri,
-			`${name}.${extension}`
-		);
+		const outputUri = vscode.Uri.joinPath(outputBaseUri, `${name}${extension}`);
 		await this.doWriteFile(outputUri, templateUri, context);
 	}
 
@@ -125,6 +122,20 @@ export class Compiler {
 	) {
 		const contentArray = await vscode.workspace.fs.readFile(templateUri);
 		const content = Mustache.render(contentArray.toString(), context);
+
+		const outputStat = await vscode.workspace.fs.stat(outputUri).then(
+			(s) => s,
+			() => null
+		);
+		if (outputStat !== null) {
+			const answer = await vscode.window.showQuickPick(["No", "Yes"], {
+				title: `Overwrite ${outputUri.path}?`,
+				placeHolder: `File ${outputUri.path} already exists, overwrite?`,
+			});
+			if (answer !== "Yes") {
+				return;
+			}
+		}
 		await vscode.workspace.fs.writeFile(outputUri, Buffer.from(content));
 	}
 

@@ -1,5 +1,6 @@
 {
-	"name": "@rhangai/templatr",
+	"name": "file-template",
+	"publisher": "rhangai",
 	"displayName": "File Template",
 	"description": "Template generator from submenu context",
 	"version": "0.0.1",

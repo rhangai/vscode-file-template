@@ -12,6 +12,9 @@ export function activate(context: vscode.ExtensionContext) {
 		async (uri: any) => {
 			const items = await compiler.find(uri);
 			if (items.length <= 0) {
+				vscode.window.showErrorMessage(
+					"No template found. Please create a templates folder inside your .vscode folder"
+				);
 				return;
 			}
 
