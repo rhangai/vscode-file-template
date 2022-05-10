@@ -85,7 +85,10 @@ export class Compilation {
 	}
 
 	private async writeFile() {
-		const extension = extname(this.item.uri.path);
+		let extension = extname(this.item.uri.path);
+		if (extension === ".template") {
+			extension = extname(basename(this.item.uri.path, extension));
+		}
 		await this.doWriteFile(`${this.name}${extension}`, this.item.uri);
 	}
 
