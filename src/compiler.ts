@@ -19,7 +19,29 @@ export class Compiler {
 	constructor(private readonly context: vscode.ExtensionContext) {}
 
 	async find(file: vscode.Uri): Promise<CompilerTemplateItem[]> {
-		const workspace = vscode.workspace.getWorkspaceFolder(file);
+		return this.findByWorkspaces(file, [
+			vscode.workspace.getWorkspaceFolder(file),
+			vscode.workspace.workspaceFolders?.[0],
+		]);
+	}
+
+	private async findByWorkspaces(
+		file: vscode.Uri,
+		workspaces: Array<vscode.WorkspaceFolder | null | undefined>
+	): Promise<CompilerTemplateItem[]> {
+		for (const workspace of workspaces) {
+			const items = await this.findByWorkspace(file, workspace);
+			if (items.length > 0) {
+				return items;
+			}
+		}
+		return [];
+	}
+
+	private async findByWorkspace(
+		file: vscode.Uri,
+		workspace: vscode.WorkspaceFolder | null | undefined
+	): Promise<CompilerTemplateItem[]> {
 		if (!workspace) {
 			return [];
 		}
