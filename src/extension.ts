@@ -31,6 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			const name = await vscode.window.showInputBox({
 				title: "Name",
+				placeHolder: "Name of the template",
 			});
 			if (!name) {
 				return;
