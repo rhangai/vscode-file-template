@@ -30,7 +30,7 @@ export class Compilation {
 		);
 	}
 
-	private readonly buildContext: any;
+	private readonly buildContext: Record<string, unknown>;
 
 	private constructor(
 		private readonly context: vscode.ExtensionContext,
@@ -43,18 +43,47 @@ export class Compilation {
 
 	private createContext() {
 		const name = this.name;
+		const { namePrefix, nameSuffix, nameWithoutPrefix, nameWithoutSuffix } =
+			this.parseName(name);
 		const dir = basename(this.outputUri.fsPath);
 		return {
-			name: name,
-			nameParam: helpers.case.param(name),
-			nameCamel: helpers.case.camel(name),
-			namePascal: helpers.case.pascal(name),
-			nameSnake: helpers.case.snake(name),
-			dir,
-			dirParam: helpers.case.param(dir),
-			dirCamel: helpers.case.camel(dir),
-			dirPascal: helpers.case.pascal(dir),
-			dirSnake: helpers.case.snake(dir),
+			...this.createContextCase("name", name),
+			...this.createContextCase("dir", dir),
+			...this.createContextCase("namePrefix", namePrefix),
+			...this.createContextCase("nameSuffix", nameSuffix),
+			...this.createContextCase("nameWithoutPrefix", nameWithoutPrefix),
+			...this.createContextCase("nameWithoutSuffix", nameWithoutSuffix),
+		};
+	}
+
+	private createContextCase(key: string, value: string) {
+		return {
+			[`${key}Param`]: helpers.case.param(value),
+			[`${key}Camel`]: helpers.case.camel(value),
+			[`${key}Pascal`]: helpers.case.pascal(value),
+			[`${key}Snake`]: helpers.case.snake(value),
+		};
+	}
+
+	private parseName(name: string) {
+		const parts = helpers.case.param(name).split("-");
+		if (parts.length <= 1) {
+			return {
+				namePrefix: "",
+				nameSuffix: "",
+				nameWithoutPrefix: name,
+				nameWithoutSuffix: name,
+			};
+		}
+		const namePrefix = parts[parts.length - 1];
+		const nameSuffix = parts[parts.length - 1];
+		const nameWithoutPrefix = parts.slice(1).join("-");
+		const nameWithoutSuffix = parts.slice(0, parts.length - 1).join("-");
+		return {
+			namePrefix,
+			nameSuffix,
+			nameWithoutPrefix,
+			nameWithoutSuffix,
 		};
 	}
 
