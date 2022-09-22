@@ -58,6 +58,7 @@ export class Compilation {
 
 	private createContextCase(key: string, value: string) {
 		return {
+			[key]: value,
 			[`${key}Param`]: helpers.case.param(value),
 			[`${key}Camel`]: helpers.case.camel(value),
 			[`${key}Pascal`]: helpers.case.pascal(value),
