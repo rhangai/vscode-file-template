@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/rhangai/vscode-file-template/compare/v0.0.4...v0.0.5) (2022-09-22)
+
+
+### Bug Fixes
+
+* Default `name` wariable was not being replaced. (Fixes [#1](https://github.com/rhangai/vscode-file-template/issues/1)) ([1504ece](https://github.com/rhangai/vscode-file-template/commit/1504ece93d667d4e747aed7f0cc1e457014985c5))
+
 ### [0.0.4](https://github.com/rhangai/vscode-file-template/compare/v0.0.3...v0.0.4) (2022-06-08)
 
 ### [0.0.3](https://github.com/rhangai/vscode-file-template/compare/v0.0.2...v0.0.3) (2022-05-10)
