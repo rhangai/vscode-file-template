@@ -41,6 +41,7 @@ The following variables are allowed in template substitution
 - dir: Base dir destination name
 - namePrefix: Name prefix (param-case by default)
 - nameSuffix: Name suffix (param-case by default)
+- nameWithoutExt: Name without an extension (Ex: `my-class.cpp` would become `my-class`)
 - nameWithoutPrefix: Name without prefix (param-case by default)
 - nameWithoutSuffix: Name without suffix (param-case by default)
 
@@ -64,3 +65,11 @@ If the name is `my-niceTemplate-create`
 | `nameSuffix`        | `create`                  |
 | `nameWithoutPrefix` | `nice-template-create`    |
 | `nameWithoutSuffix` | `my-nice-template`        |
+
+If the name is `my-niceTemplate-create.java`
+
+| Var                    | Value                         |
+| ---------------------- | ----------------------------- |
+| `name`                 | `my-niceTemplate-create.java` |
+| `nameWithoutExt`       | `my-niceTemplate-create`      |
+| `nameWithoutExtPascal` | `myNiceTemplateCreate`        |
