@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/rhangai/vscode-file-template/compare/v0.0.5...v0.0.6) (2022-09-23)
+
+
+### Features
+
+* Added nameWithoutExt ([1ea02e8](https://github.com/rhangai/vscode-file-template/commit/1ea02e80964038368dce1360a737e529ce28dd5e))
+
 ### [0.0.5](https://github.com/rhangai/vscode-file-template/compare/v0.0.4...v0.0.5) (2022-09-22)
 
 
