@@ -43,14 +43,22 @@ export class Compilation {
 
 	private createContext() {
 		const name = this.name;
-		const { namePrefix, nameSuffix, nameWithoutPrefix, nameWithoutSuffix } =
-			this.parseName(name);
+		const {
+			nameExt,
+			namePrefix,
+			nameSuffix,
+			nameWithoutExt,
+			nameWithoutPrefix,
+			nameWithoutSuffix,
+		} = this.parseName(name);
 		const dir = basename(this.outputUri.fsPath);
 		return {
 			...this.createContextCase("name", name),
 			...this.createContextCase("dir", dir),
+			...this.createContextCase("nameExt", nameExt),
 			...this.createContextCase("namePrefix", namePrefix),
 			...this.createContextCase("nameSuffix", nameSuffix),
+			...this.createContextCase("nameWithoutExt", nameWithoutExt),
 			...this.createContextCase("nameWithoutPrefix", nameWithoutPrefix),
 			...this.createContextCase("nameWithoutSuffix", nameWithoutSuffix),
 		};
@@ -68,8 +76,18 @@ export class Compilation {
 
 	private parseName(name: string) {
 		const parts = helpers.case.param(name).split("-");
+
+		let nameExt = "";
+		let nameWithoutExt = name;
+		if (name.indexOf(".") >= 0) {
+			nameExt = extname(name);
+			nameWithoutExt = basename(name, nameExt);
+		}
+
 		if (parts.length <= 1) {
 			return {
+				nameExt,
+				nameWithoutExt,
 				namePrefix: "",
 				nameSuffix: "",
 				nameWithoutPrefix: name,
@@ -81,8 +99,10 @@ export class Compilation {
 		const nameWithoutPrefix = parts.slice(1).join("-");
 		const nameWithoutSuffix = parts.slice(0, parts.length - 1).join("-");
 		return {
+			nameExt,
 			namePrefix,
 			nameSuffix,
+			nameWithoutExt,
 			nameWithoutPrefix,
 			nameWithoutSuffix,
 		};
