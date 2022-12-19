@@ -51,6 +51,8 @@ You can also use the following variants for each var
 - varCamel: The variable var camel cased (`someName`)
 - varPascal: The variable var pascal cased (`SomeName`)
 - varSnake: The variable var snake cased (`some_name`)
+- varConstant: The variable var snake cased (`SOME_NAME`)
+- varDot: The variable var snake cased (`some.name`)
 
 If the name is `my-niceTemplate-create`
 
@@ -61,6 +63,8 @@ If the name is `my-niceTemplate-create`
 | `nameSnake`         | `my_nice_template_create` |
 | `nameCamel`         | `myNiceTemplateCreate`    |
 | `namePascal`        | `MyNiceTemplateCreate`    |
+| `nameConstant`      | `MY_NICE_TEMPLATE_CREATE` |
+| `nameDot`           | `my.nice.template.create` |
 | `namePrefix`        | `my`                      |
 | `nameSuffix`        | `create`                  |
 | `nameWithoutPrefix` | `nice-template-create`    |
