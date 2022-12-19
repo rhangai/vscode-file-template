@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.7](https://github.com/rhangai/vscode-file-template/compare/v0.0.6...v0.0.7) (2022-12-19)
+
+
+### Features
+
+* Added new Constant and Dot cases ([94e56d3](https://github.com/rhangai/vscode-file-template/commit/94e56d37982bf4b9c56d972b22b552b66a769e11))
+
 ### [0.0.6](https://github.com/rhangai/vscode-file-template/compare/v0.0.5...v0.0.6) (2022-09-23)
 
 
