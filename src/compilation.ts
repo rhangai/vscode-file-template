@@ -71,6 +71,8 @@ export class Compilation {
 			[`${key}Camel`]: helpers.case.camel(value),
 			[`${key}Pascal`]: helpers.case.pascal(value),
 			[`${key}Snake`]: helpers.case.snake(value),
+			[`${key}Constant`]: helpers.case.constant(value),
+			[`${key}Dot`]: helpers.case.dot(value),
 		};
 	}
 
