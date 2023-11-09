@@ -117,22 +117,35 @@ export class Compilation {
 			await this.writeFile();
 		}
 	}
-	private async writeDir() {
+	private async writeDir(
+		templateUri: vscode.Uri = this.item.uri,
+		outputUri: vscode.Uri = this.outputUri
+	) {
 		const templateFiles = await vscode.workspace.fs
-			.readDirectory(this.item.uri)
+			.readDirectory(templateUri)
 			.then(
 				(files) => files,
 				() => []
 			);
 		const files = templateFiles.filter(
-			([, fileType]) => fileType === vscode.FileType.File
+			([, fileType]) =>
+				fileType === vscode.FileType.File || vscode.FileType.Directory
 		);
-		for (const [file] of files) {
-			const outputFilename = Mustache.render(file, this.buildContext);
-			await this.doWriteFile(
-				outputFilename,
-				vscode.Uri.joinPath(this.item.uri, file)
+		for (const [file, fileType] of files) {
+			const newOutputUri = Compilation.resolveOutputUri(
+				outputUri,
+				Mustache.render(file, this.buildContext)
 			);
+
+			if (fileType === vscode.FileType.File) {
+				await this.doWriteFile(
+					newOutputUri,
+					vscode.Uri.joinPath(templateUri, file)
+				);
+			} else if (fileType === vscode.FileType.Directory) {
+				await this.doWriteDir(newOutputUri);
+				this.writeDir(vscode.Uri.joinPath(templateUri, file), newOutputUri);
+			}
 		}
 	}
 
@@ -141,7 +154,28 @@ export class Compilation {
 		if (extension === ".template") {
 			extension = extname(basename(this.item.uri.path, extension));
 		}
-		await this.doWriteFile(`${this.name}${extension}`, this.item.uri);
+		const outputUri = Compilation.resolveOutputUri(
+			this.outputUri,
+			`${this.name}${extension}`
+		);
+		await this.doWriteFile(outputUri, this.item.uri);
+	}
+
+	private async doWriteDir(outputUri: vscode.Uri) {
+		const outputStat = await vscode.workspace.fs.stat(outputUri).then(
+			(s) => s,
+			() => null
+		);
+		if (outputStat !== null) {
+			const answer = await vscode.window.showQuickPick(["No", "Yes"], {
+				title: `Overwrite ${outputUri.path}?`,
+				placeHolder: `File ${outputUri.path} already exists, overwrite?`,
+			});
+			if (answer !== "Yes") {
+				return;
+			}
+		}
+		await vscode.workspace.fs.createDirectory(outputUri);
 	}
 
 	/**
@@ -151,8 +185,7 @@ export class Compilation {
 	 * @param context
 	 * @returns
 	 */
-	private async doWriteFile(outputFile: string, templateUri: vscode.Uri) {
-		const outputUri = Compilation.resolveOutputUri(this.outputUri, outputFile);
+	private async doWriteFile(outputUri: vscode.Uri, templateUri: vscode.Uri) {
 		const contentArray = await vscode.workspace.fs.readFile(templateUri);
 		const content = Mustache.render(contentArray.toString(), this.buildContext);
 
