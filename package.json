@@ -7,7 +7,7 @@
 	},
 	"displayName": "File Template",
 	"description": "Create custom files from user defined templates",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
@@ -15,7 +15,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:template.write"
+		"onCommand:template.write",
+		"onCommand:template.writeUnknown"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
@@ -23,6 +24,14 @@
 			{
 				"command": "template.write",
 				"title": "Create from template"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "template.writeUnknown",
+				"when": "filesExplorerFocus && foldersViewVisible && !inputFocus",
+				"key": "ctrl+shift+a",
+				"mac": "cmd+shift+a"
 			}
 		],
 		"menus": {
